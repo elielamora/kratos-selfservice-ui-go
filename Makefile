@@ -1,6 +1,6 @@
 .PHONY: test
 test:
-	go test ./options
+	go test -v -race -cover ./...
 
 # Compile the app and package in a docker image
 #
@@ -58,7 +58,7 @@ quickstart:
 		--build \
 		--force-recreate
 
-# Helper targets to open veruious pages on the system, after you have run 'make quickstart'
+# Helper targets to open various pages on the system, after you have run 'make quickstart'
 #
 .PHONY: open-mail
 open-mail:

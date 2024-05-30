@@ -1,13 +1,14 @@
 package handlers
 
 import (
+	"context"
 	_ "embed"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/benbjohnson/hashfs"
-	"github.com/davidoram/kratos-selfservice-ui-go/api_client"
-	"github.com/ory/kratos-client-go/client/public"
+	"github.com/elielamora/kratos-selfservice-ui-go/apiclient"
 )
 
 // RegistrationParams configure the Registration http handler
@@ -28,22 +29,28 @@ func (rp RegistrationParams) Registration(w http.ResponseWriter, r *http.Request
 	flow := r.URL.Query().Get("flow")
 	if flow == "" {
 		log.Printf("No flow ID found in URL, initializing login flow, redirect to %s", rp.FlowRedirectURL)
-		http.Redirect(w, r, rp.FlowRedirectURL, http.StatusMovedPermanently)
+		http.Redirect(w, r, rp.FlowRedirectURL, http.StatusSeeOther)
 		return
 	}
 
-	// Call Kratos to retrieve the login form
-	params := public.NewGetSelfServiceRegistrationFlowParams()
-	params.SetID(flow)
 	log.Print("Calling Kratos API to get self service registration")
-	res, err := api_client.PublicClient().Public.GetSelfServiceRegistrationFlow(params)
+	ctx, cancel := context.WithTimeout(r.Context(), time.Minute)
+	defer cancel()
+	req := apiclient.PublicClient().FrontendAPI.GetRegistrationFlow(ctx)
+	res, _, err := req.Id(flow).
+		Cookie(r.Header.Get("Cookie")).
+		Execute()
 	if err != nil {
 		log.Printf("Error getting self service registration flow %v, redirecting to /", err)
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
+	ui := res.GetUi()
 	dataMap := map[string]interface{}{
-		"config":      res.GetPayload().Methods["password"].Config,
+		"method":      ui.Method,
+		"action":      ui.Action,
+		"nodes":       ui.Nodes,
+		"messages":    ui.Messages,
 		"flow":        flow,
 		"fs":          rp.FS,
 		"pageHeading": "Registration",

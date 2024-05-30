@@ -13,7 +13,7 @@ When your application integrates with Krytos then you gain the benefits of:
 - BYO data model.  The identity data model that Kratos uses is provided by your application.
 - Long term support. Kratos project is supported by some big players in the open source space such as ThoughtWorks and the Raspberry Pi project.
 
-This blog post explains how to write an application `kratos-selfservice-ui-go`, that integrates with Kratos, written in  [Go](https://golang.org/). Source code for `kratos-selfservice-ui-go` is available on [github](https://github.com/davidoram/kratos-selfservice-ui-go).
+This blog post explains how to write an application `kratos-selfservice-ui-go`, that integrates with Kratos, written in  [Go](https://golang.org/). Source code for `kratos-selfservice-ui-go` is available on [github](https://github.com/elielamora/kratos-selfservice-ui-go).
 
 The structure of the application is relatively straightforward, and based on the [Kratos self service example application written in Node](https://github.com/ory/kratos-selfservice-ui-node). It provides the following self service UI pages:
 
@@ -74,7 +74,7 @@ func (rp RegistrationParams) Registration(w http.ResponseWriter, r *http.Request
 	flow := r.URL.Query().Get("flow")
 	if flow == "" {
 		log.Printf("No flow ID found in URL, initializing login flow, redirect to %s", rp.FlowRedirectURL)
-		http.Redirect(w, r, rp.FlowRedirectURL, http.StatusMovedPermanently)
+		http.Redirect(w, r, rp.FlowRedirectURL, http.StatusTemporaryRedirect)
 		return
 	}
 
@@ -85,7 +85,7 @@ func (rp RegistrationParams) Registration(w http.ResponseWriter, r *http.Request
 	res, err := api_client.PublicClient().Public.GetSelfServiceRegistrationFlow(params)
 	if err != nil {
 		log.Printf("Error getting self service registration flow %v, redirecting to /", err)
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	dataMap := map[string]interface{}{

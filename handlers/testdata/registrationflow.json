@@ -1,0 +1,115 @@
+{
+  "expires_at": "2024-05-30T14:54:55.997370963Z",
+  "id": "49036dfd-c1fe-4935-9d11-bd760802a81e",
+  "issued_at": "2024-05-30T14:44:55.997370963Z",
+  "organization_id": null,
+  "request_url": "http://127.0.0.1/self-service/registration/browser",
+  "state": "choose_method",
+  "type": "browser",
+  "ui": {
+    "action": "http://127.0.0.1/self-service/registration?flow=49036dfd-c1fe-4935-9d11-bd760802a81e",
+    "method": "POST",
+    "nodes": [
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "csrf_token",
+          "node_type": "input",
+          "required": true,
+          "type": "hidden",
+          "value": "x+EJEkwDtSAYVNabtM2yhXJ0BtGPa4XYCy6RgTjPTpainp8zvrhrO2yyQH6g7oB0CM1z090HqarmSSZAKkqbKA=="
+        },
+        "group": "default",
+        "messages": [],
+        "meta": {},
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "autocomplete": "email",
+          "disabled": false,
+          "name": "traits.email",
+          "node_type": "input",
+          "required": true,
+          "type": "email"
+        },
+        "group": "password",
+        "messages": [],
+        "meta": {
+          "label": {
+            "context": {
+              "title": "E-Mail"
+            },
+            "id": 1070002,
+            "text": "E-Mail",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "autocomplete": "new-password",
+          "disabled": false,
+          "name": "password",
+          "node_type": "input",
+          "required": true,
+          "type": "password"
+        },
+        "group": "password",
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070001,
+            "text": "Password",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "traits.name.first",
+          "node_type": "input",
+          "type": "text"
+        },
+        "group": "password",
+        "messages": [],
+        "meta": {},
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "traits.name.last",
+          "node_type": "input",
+          "type": "text"
+        },
+        "group": "password",
+        "messages": [],
+        "meta": {},
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "method",
+          "node_type": "input",
+          "type": "submit",
+          "value": "password"
+        },
+        "group": "password",
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1040001,
+            "text": "Sign up",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      }
+    ]
+  }
+}

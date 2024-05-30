@@ -14,7 +14,6 @@ import (
 // with its content at build time - see https://golang.org/pkg/embed/
 //
 // This means the binary contains everything it needs to serve the site
-//
 var (
 	// Shared templates
 	//
@@ -110,7 +109,7 @@ func init() {
 func globalFuncMap() template.FuncMap {
 
 	return template.FuncMap{
-		"assetPath": func(fs hashfs.FS, name string) string {
+		"assetPath": func(fs *hashfs.FS, name string) string {
 			if strings.HasPrefix(name, "/") {
 				log.Printf("Error assetPath called with name: '%s' should not start with '/'", name)
 			}
@@ -138,7 +137,7 @@ func settingsFuncMap() template.FuncMap {
 			if lbl, ok := fieldLabel[name]; ok {
 				return lbl
 			}
-			log.Printf("No labelFor name: %s", name)
+			log.Printf("no labelFor name: %s", name)
 			return ""
 		},
 	}

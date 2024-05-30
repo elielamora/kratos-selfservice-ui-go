@@ -4,24 +4,25 @@
 
 <div class="md:grid md:grid-cols-1 md:gap-6">
   <div class="mt-5 md:mt-0">
-    <form method="{{.config.Method}}" action="{{.config.Action}}" accept-charset="UTF-8">
+    <form method="{{.method}}" action="{{.action}}" accept-charset="UTF-8">
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
 
-          {{range .config.Fields}}
+          {{range .nodes}}
             <div class="grid grid-cols-3 gap-6">
               {{ $field := . }}
+              {{ $inputAttrs := .Attributes.UiNodeInputAttributes }}
               <div class="col-span-3 sm:col-span-2">
-                <label class="block text-sm font-medium text-gray-700">{{labelFor .Name}}</label>
+                <label class="block text-sm font-medium text-gray-700">{{labelFor $inputAttrs.Name}}</label>
 
                 <div class="mt-1 flex rounded-md shadow-sm">
-                  <input required="{{.Required}}"
-                        name="{{.Name}}"
-                        data-cy="{{.Name}}"
-                        type="{{.Type}}"
-                        value="{{.Value}}"
-                        {{if .Pattern}} pattern="{{.Pattern}}" {{end}}
-                        {{if .Disabled}}disabled{{end}}
+                  <input required="{{$inputAttrs.Required}}"
+                        name="{{$inputAttrs.Name}}"
+                        data-cy="{{$inputAttrs.Name}}"
+                        type="{{$inputAttrs.Type}}"
+                        value="{{$inputAttrs.Value}}"
+                        {{if $inputAttrs.Pattern}} pattern="{{$inputAttrs.Pattern}}" {{end}}
+                        {{if $inputAttrs.Disabled}}disabled{{end}}
                         class="border mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-6 py-4"
                   />
                 </div>

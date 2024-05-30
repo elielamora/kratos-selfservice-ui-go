@@ -24,12 +24,15 @@ RUN go mod download
 
 ADD . .
 
-RUN go build -ldflags="-extldflags=-static" -o /usr/bin/kratos-selfservice-ui-go
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
+
+RUN go build -ldflags="-extldflags=-static" -gcflags="all=-N -l" -o /usr/bin/kratos-selfservice-ui-go
 
 FROM scratch
 COPY --from=gobuilder /usr/bin/kratos-selfservice-ui-go /
+COPY --from=gobuilder /go/bin/dlv /
 
 # Expose the default port that we will be listening to
-EXPOSE 4455
+EXPOSE 4455 40000
 
-ENTRYPOINT ["/kratos-selfservice-ui-go"]
+CMD ["/dlv", "--listen=:40000", "--headless=true", "--api-version=2", "exec", "/kratos-selfservice-ui-go"]

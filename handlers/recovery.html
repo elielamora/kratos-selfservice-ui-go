@@ -4,29 +4,30 @@
 
 <div class="md:grid md:grid-cols-1 md:gap-6">
   <div class="mt-5 md:mt-0">
-    <form method="{{.link.Method}}" action="{{.link.Action}}" accept-charset="UTF-8">
+    <form method="{{.method}}" action="{{.action}}" accept-charset="UTF-8">
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-          {{range .link.Fields}}
+          {{range .nodes}}
             {{ $field := . }}
+            {{ $inputAttrs := .Attributes.UiNodeInputAttributes }}
             <div class="grid grid-cols-3 gap-6">
               <div class="col-span-3 sm:col-span-2">
-                <label class="block text-sm font-medium text-gray-700">{{labelFor .Name}}</label>
-                <input required="{{.Required}}"
-                      name="{{.Name}}"
-                      data-cy="{{.Name}}"
-                      type="{{.Type}}"
-                      value="{{.Value}}"
-                      {{if .Pattern}} pattern="{{.Pattern}}" {{end}}
-                      {{if .Disabled}}disabled{{end}}
+                <label class="block text-sm font-medium text-gray-700">{{labelFor $inputAttrs.Name}}</label>
+                <input required="{{$inputAttrs.Required}}"
+                      name="{{$inputAttrs.Name}}"
+                      data-cy="{{$inputAttrs.Name}}"
+                      type="{{$inputAttrs.Type}}"
+                      value="{{$inputAttrs.Value}}"
+                      {{if $inputAttrs.Pattern}} pattern="{{$inputAttrs.Pattern}}" {{end}}
+                      {{if $inputAttrs.Disabled}}disabled{{end}}
                       class="border mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-6 py-4"
                 />
               </div>
 
               {{range .Messages }}
                 <!-- Error messages -->
-                <p data-cy="field_message_id_{{$field.Name}}" class="mt-2 text-sm text-red-500 bg-red-50">
-                  <span class="font-extrabold">{{.ID}}</span> &nbsp; {{.Text}}
+                <p data-cy="field_message_id_{{$field.Meta.Label.Id}}" class="mt-2 text-sm text-red-500 bg-red-50">
+                  <span class="font-extrabold {{.Type}}">{{.Id}}</span> &nbsp; {{.Text}}
                 </p>
               {{end}}
 

@@ -26,7 +26,7 @@ func (lp LogoutParams) Logout(w http.ResponseWriter, r *http.Request) {
 	flow := r.URL.Query().Get("flow")
 	if flow == "" {
 		log.Printf("No flow ID found in URL, initializing logout flow, redirect to %s", lp.FlowRedirectURL)
-		http.Redirect(w, r, lp.FlowRedirectURL, http.StatusMovedPermanently)
+		http.Redirect(w, r, lp.FlowRedirectURL, http.StatusSeeOther)
 		return
 	}
 	// Clear the session

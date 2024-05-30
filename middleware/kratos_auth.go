@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/davidoram/kratos-selfservice-ui-go/session"
+	"github.com/elielamora/kratos-selfservice-ui-go/session"
 )
 
 // KratosAuthParams configure the KratosAuth http handler

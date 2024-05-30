@@ -16,7 +16,6 @@ func MustMakeURLValue(s string) URLValue {
 		log.Fatalf("Error parsing URL '%s', error; %v", s, err)
 	}
 	return URLValue{u}
-
 }
 
 func (v URLValue) String() string {

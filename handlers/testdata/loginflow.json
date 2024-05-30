@@ -1,0 +1,95 @@
+{
+  "created_at": "2024-05-29T12:31:42.525171Z",
+  "expires_at": "2024-05-29T12:41:42.520946251Z",
+  "id": "51c646af-9faf-44f2-8bd9-39fe2775c170",
+  "issued_at": "2024-05-29T12:31:42.520946251Z",
+  "organization_id": null,
+  "refresh": false,
+  "request_url": "http://127.0.0.1/self-service/login/browser",
+  "requested_aal": "aal1",
+  "state": "choose_method",
+  "type": "browser",
+  "ui": {
+    "action": "http://127.0.0.1/self-service/login?flow=51c646af-9faf-44f2-8bd9-39fe2775c170",
+    "method": "POST",
+    "nodes": [
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "csrf_token",
+          "node_type": "input",
+          "required": true,
+          "type": "hidden",
+          "value": "OyyDYuUwYUZhfO1nJfPtoyFteT8sETnm34FtftceAZKXPTE9tkWOVJ8f3SBSRza8eNA5p6Xy1wNCoEzAK7Accg=="
+        },
+        "group": "default",
+        "messages": [],
+        "meta": {},
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "identifier",
+          "node_type": "input",
+          "required": true,
+          "type": "text",
+          "value": ""
+        },
+        "group": "default",
+        "messages": [],
+        "meta": {
+          "label": {
+            "context": {
+              "title": "E-Mail"
+            },
+            "id": 1070002,
+            "text": "E-Mail",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "autocomplete": "current-password",
+          "disabled": false,
+          "name": "password",
+          "node_type": "input",
+          "required": true,
+          "type": "password"
+        },
+        "group": "password",
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1070001,
+            "text": "Password",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      },
+      {
+        "attributes": {
+          "disabled": false,
+          "name": "method",
+          "node_type": "input",
+          "type": "submit",
+          "value": "password"
+        },
+        "group": "password",
+        "messages": [],
+        "meta": {
+          "label": {
+            "id": 1010001,
+            "text": "Sign in",
+            "type": "info"
+          }
+        },
+        "type": "input"
+      }
+    ]
+  },
+  "updated_at": "2024-05-29T12:31:42.525171Z"
+}

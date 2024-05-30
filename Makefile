@@ -6,12 +6,12 @@ test:
 #
 .PHONY: docker docker-push
 docker:
-	docker build -t davidoram/kratos-selfservice-ui-go:latest .
+	docker build -t elielamora/kratos-selfservice-ui-go:latest .
 
 # Push the application image to dockerhub
 #
 docker-push:
-	docker image push davidoram/kratos-selfservice-ui-go:latest
+	docker image push elielamora/kratos-selfservice-ui-go:latest
 
 clean:
 	rm -rf static
@@ -26,12 +26,17 @@ copy-images: static_src/images/*
 
 .PHONY: fastrun gen-keys compile-docker
 fastrun:
-	go run . --kratos-public-url http://127.0.0.1:4433/ \
-		--kratos-browser-url http://127.0.0.1:4433/ \
-		--kratos-admin-url http://127.0.0.1:4434/ \
-		--base-url / \
-		--port 4455 \
-		--cookie-store-key-pairs '6QKIvm1ZwLD+hrS6zysrs50a8gOU8O385BkVEDdlDN0= 2m/+Pva16CPu3pDs4DLfmR7q74WmI0Bv+3bxdUtHmSQ='
+	KRATOS_PUBLIC_URL=http://127.0.0.1:4433/ \
+	KRATOS_BROWSER_URL=http://127.0.0.1:4433/ \
+	KRATOS_ADMIN_URL=http://127.0.0.1:4434/ \
+	PORT=4455 \
+	BASE_URL=/ \
+	COOKIE_STORE_KEY_PAIRS=aEl+c9ZPjA92UYRIL5J0x/5XtIFHb53JSWZcGiZOf4I= OrbMtosgpCakYvp81RZ7mMuFewiDbeOdQkvp7l1kbYU= \
+	go run .
+
+.PHONY: build
+build:
+	CGO_ENABLED=0 go build -ldflags="-extldflags=-static" -o /usr/bin/kratos-selfservice-ui-go
 
 # Run the app standalone
 run: clean build-css copy-images fastrun
@@ -82,12 +87,12 @@ open-all: open-mail open-traefik open-app
 cypress-docker:
 	rm -rf $(CURDIR)/cypress-tests/node_modules
 	mkdir -p $(CURDIR)/cypress-tests/node_modules
-	cd cypress-tests && docker build -t davidoram/kratos-go-cypress:latest .
+	cd cypress-tests && docker build -t elielamora/kratos-go-cypress:latest .
 
 # Push the custom cypress docker image to dockerhub
 #
 cypress-docker-push:
-	docker image push davidoram/kratos-go-cypress:latest
+	docker image push elielamora/kratos-go-cypress:latest
 
 # Run cypress interactively.
 #
@@ -101,7 +106,7 @@ cypress-docker-push:
 .PHONY: cypress
 cypress:
 	xhost + 127.0.0.1
-	docker run -it --network="host" -v $(CURDIR)/cypress-tests:/e2e -w /e2e -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=host.docker.internal:0 --entrypoint cypress davidoram/kratos-go-cypress:latest open --project .
+	docker run -it --network="host" -v $(CURDIR)/cypress-tests:/e2e -w /e2e -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=host.docker.internal:0 --entrypoint cypress elielamora/kratos-go-cypress:latest open --project .
 
 # Run the cypress tests in 'headless' mode, good for CI/CD.
 #
@@ -110,11 +115,31 @@ cypress:
 #
 .PHONY: cypress-headless
 cypress-headless:
-	docker run -it --network="host" -v $(CURDIR)/cypress-tests:/e2e -w /e2e davidoram/kratos-go-cypress:latest
+	docker run -it --network="host" -v $(CURDIR)/cypress-tests:/e2e -w /e2e elielamora/kratos-go-cypress:latest
 
 # List the browsers in the cypress image
 #
 .PHONY: cypress-info
 cypress-info:
-	docker run -it -v $(CURDIR)/cypress-tests:/e2e -w /e2e --entrypoint=cypress davidoram/kratos-go-cypress:latest info
+	docker run -it -v $(CURDIR)/cypress-tests:/e2e -w /e2e --entrypoint=cypress elielamora/kratos-go-cypress:latest info
 
+.PHONY: kratossnapshot.loginflow
+kratossnapshot.loginflow:
+	@go run ./cmd/kratossnapshot/main.go \
+		--kratos-admin-url="http://0.0.0.0:4434" \
+		--kratos-flow-type="login" \
+	 	| jq
+
+.PHONY: kratossnapshot.registrationflow
+kratossnapshot.registrationflow:
+	@go run ./cmd/kratossnapshot/main.go \
+		--kratos-admin-url="http://0.0.0.0:4434" \
+		--kratos-flow-type="registration" \
+		| jq
+
+.PHONY: kratossnapshot.recoveryflow
+kratossnapshot.recoveryflow:
+	@go run ./cmd/kratossnapshot/main.go \
+		--kratos-admin-url="http://0.0.0.0:4434" \
+		--kratos-flow-type="recovery" \
+		| jq

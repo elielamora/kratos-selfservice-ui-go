@@ -10,11 +10,11 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/davidoram/kratos-selfservice-ui-go/api_client"
-	"github.com/davidoram/kratos-selfservice-ui-go/handlers"
-	"github.com/davidoram/kratos-selfservice-ui-go/middleware"
-	"github.com/davidoram/kratos-selfservice-ui-go/options"
-	"github.com/davidoram/kratos-selfservice-ui-go/session"
+	"github.com/elielamora/kratos-selfservice-ui-go/apiclient"
+	"github.com/elielamora/kratos-selfservice-ui-go/handlers"
+	"github.com/elielamora/kratos-selfservice-ui-go/middleware"
+	"github.com/elielamora/kratos-selfservice-ui-go/options"
+	"github.com/elielamora/kratos-selfservice-ui-go/session"
 
 	"github.com/benbjohnson/hashfs"
 
@@ -25,28 +25,29 @@ import (
 
 // staticFS holds the static files, CSS images etc.
 // Its baked into the application executable using the embed API - see https://golang.org/pkg/embed/
+//
 //go:embed static
 var staticFS embed.FS
 
 func main() {
 
-	opt := options.NewOptions().SetFromCommandLine()
-	if err := opt.Validate(); err != nil {
-		log.Fatalf("Error parsing command line: %v", err)
+	opts, err := options.FromEnv() //.SetFromCommandLine()
+	if err != nil {
+		log.Fatalf("Error parsing options from environment: %v", err)
 	}
-	log.Printf("KratosAdminURL: %s", opt.KratosAdminURL.String())
-	log.Printf("KratosPublicURL: %s", opt.KratosPublicURL.String())
-	log.Printf("KratosBrowserURL: %s", opt.KratosPublicURL.String())
-	log.Printf("BaseURL: %s", opt.BaseURL.String())
-	log.Printf("Address: %s", opt.Address())
-	log.Printf("Number of Cookie store keys: %d", len(opt.CookieStoreKeyPairs))
+	log.Printf("KratosAdminURL: %s", opts.KratosAdminURL.String())
+	log.Printf("KratosPublicURL: %s", opts.KratosPublicURL.String())
+	log.Printf("KratosBrowserURL: %s", opts.KratosPublicURL.String())
+	log.Printf("BaseURL: %s", opts.BaseURL.String())
+	log.Printf("Address: %s", opts.Address())
+	log.Printf("Number of Cookie store keys: %d", len(opts.CookieStoreKeyPairs))
 
 	// Cetup Kratos API client
-	api_client.InitPublicClient(*opt.KratosPublicURL)
-	api_client.InitAdminClient(*opt.KratosAdminURL)
+	apiclient.InitPublicClient(*opts.KratosPublicURL)
+	apiclient.InitAdminClient(*opts.KratosAdminURL)
 
 	// Setup sesssion store in cookies
-	var store = sessions.NewCookieStore(opt.CookieStoreKeyPairs...)
+	var store = sessions.NewCookieStore(opts.CookieStoreKeyPairs...)
 
 	// Static assets are wrapped in a hash fs that allows for aggesive http caching
 	var fsys = hashfs.NewFS(staticFS)
@@ -54,8 +55,10 @@ func main() {
 	// Public Routes need no authentication
 	r := mux.NewRouter()
 
-	r.Use(gh.RecoveryHandler(gh.PrintRecoveryStack(true)),
-		middleware.NoCacheMiddleware)
+	r.Use(
+		gh.RecoveryHandler(gh.PrintRecoveryStack(true)),
+		middleware.NoCacheMiddleware,
+	)
 
 	homeP := handlers.HomeParams{
 		SessionStore: session.SessionStore{Store: store},
@@ -64,31 +67,31 @@ func main() {
 	r.HandleFunc("/", homeP.Home)
 
 	regP := handlers.RegistrationParams{
-		FlowRedirectURL: opt.RegistrationURL(),
+		FlowRedirectURL: opts.RegistrationURL(),
 		FS:              fsys,
 	}
 	r.HandleFunc("/auth/registration", regP.Registration)
 
 	settingsP := handlers.SettingsParams{
-		FlowRedirectURL: opt.SettingsURL(),
+		FlowRedirectURL: opts.SettingsURL(),
 		FS:              fsys,
 	}
 	r.HandleFunc("/auth/settings", settingsP.Settings)
 
 	loginP := handlers.LoginParams{
-		FlowRedirectURL: opt.LoginFlowURL(),
+		FlowRedirectURL: opts.LoginFlowURL(),
 		FS:              fsys,
 	}
 	r.HandleFunc("/auth/login", loginP.Login).Name("login")
 
 	logoutP := handlers.LogoutParams{
-		FlowRedirectURL: opt.LogoutFlowURL(),
+		FlowRedirectURL: opts.LogoutFlowURL(),
 		FS:              fsys,
 	}
 	r.HandleFunc("/auth/logout", logoutP.Logout)
 
 	recoverP := handlers.RecoveryParams{
-		FlowRedirectURL: opt.RecoveryFlowURL(),
+		FlowRedirectURL: opts.RecoveryFlowURL(),
 		FS:              fsys,
 	}
 	r.HandleFunc("/auth/recovery", recoverP.Recovery)
@@ -98,7 +101,7 @@ func main() {
 	// Following routes must be authenticated, so they get extra middleware
 	authP := middleware.KratosAuthParams{
 		SessionStore:      session.SessionStore{Store: store},
-		WhoAmIURL:         opt.WhoAmIURL(),
+		WhoAmIURL:         opts.WhoAmIURL(),
 		RedirectUnauthURL: MustURL(r.Get("login")).String(),
 	}
 
@@ -116,7 +119,7 @@ func main() {
 
 	// Start server
 	srv := &http.Server{
-		Addr: opt.Address(),
+		Addr: opts.Address(),
 		// Good practice to set timeouts to avoid Slowloris attacks.
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
@@ -140,7 +143,7 @@ func main() {
 	<-c
 
 	// Create a deadline to wait for.
-	ctx, cancel := context.WithTimeout(context.Background(), opt.ShutdownWait)
+	ctx, cancel := context.WithTimeout(context.Background(), opts.ShutdownWait)
 	defer cancel()
 	// Doesn't block if no connections, but will otherwise wait
 	// until the timeout deadline.

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/benbjohnson/hashfs"
-	"github.com/davidoram/kratos-selfservice-ui-go/session"
+	"github.com/elielamora/kratos-selfservice-ui-go/session"
 )
 
 // HomeParams configure the Home http handler

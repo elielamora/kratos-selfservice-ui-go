@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/benbjohnson/hashfs"
-	"github.com/davidoram/kratos-selfservice-ui-go/session"
+	"github.com/elielamora/kratos-selfservice-ui-go/session"
 )
 
 // DashboardParams configure the Dashboard http handler

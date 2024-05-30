@@ -1,44 +1,83 @@
-version: '3.7'
-
 services:
-  kratos-migrate:
-    image: oryd/kratos:v0.5.5-alpha.1.pre.1-sqlite
+  kratos-selfservice-ui-go:
+    #    image: elielamora/kratos-selfservice-ui-go:latest
+    build:
+      # use the debug version locally to be able to debug
+      dockerfile: debug.dockerfile
+      context: .
+    pull_policy: build
+    ports:
+      - "4455:4455"
+      - "40000:40000"
     environment:
-      - DSN=sqlite:///var/lib/sqlite/db.sqlite?_fk=true&mode=rwc
-    volumes:
-      -
-        type: volume
-        source: kratos-sqlite
-        target: /var/lib/sqlite
-        read_only: false
-      -
-        type: bind
-        source: ./contrib/quickstart/kratos/email-password
-        target: /etc/config/kratos
-    command:
-      -c /etc/config/kratos/kratos.yml migrate sql -e --yes
-    restart: on-failure
+      - KRATOS_PUBLIC_URL=http://kratos:4433/
+      - KRATOS_ADMIN_URL=http://kratos:4434/
+      - KRATOS_BROWSER_URL=http://127.0.0.1:4433/
+      #      - KRATOS_BROWSER_URL=http://127.0.0.1/
+      - BASE_URL=/
+      - PORT=4455
+      # Enable debug trace of Kratos API calls
+      - DEBUG=1
+      - SECURITY_MODE=
+      - COOKIE_STORE_KEY_PAIRS=aEl+c9ZPjA92UYRIL5J0x/5XtIFHb53JSWZcGiZOf4I= OrbMtosgpCakYvp81RZ7mMuFewiDbeOdQkvp7l1kbYU=
+    security_opt:
+      - "apparmor:unconfined"
+    cap_add:
+      - SYS_PTRACE
     networks:
-      - internal
+      internal:
+      # the aliases are not required, but are useful if the applications want to internally
+      # reference each other by host name
+    #        aliases:
+    #        - "app1.test"
+    labels:
+      - "traefik.port=4455"
+      - "traefik.http.routers.kratos-selfservice-ui-go.rule=Path(`/`) || PathPrefix(`/dashboard`,`/auth`,`/static`)"
+      - "traefik.docker.network=internal"
+      - "traefik.enable=true"
+    restart: on-failure
+#    profiles:
+#      - ignore
+
+#  kratos-migrate:
+#    image: oryd/kratos:v1.1.0
+#    environment:
+##      - DSN=sqlite:///var/lib/sqlite/db.sqlite?_fk=true&mode=rwc
+#      - DSN=sqlite:///tmp/kratos/some-db.sqlite?_fk=true
+#    volumes:
+#      -
+#        type: volume
+#        source: kratos-sqlite
+#        target: /tmp/kratos/some-db.sqlite
+#        read_only: false
+#      -
+#        type: bind
+#        source: ./contrib/quickstart/kratos/email-password
+#        target: /etc/config/kratos
+#    command:
+#      migrate sql -c /etc/config/kratos/kratos.yml -e --yes
+#    restart: on-failure
+#    networks:
+#      - internal
 
   kratos:
-    depends_on:
-      - kratos-migrate
-    image: oryd/kratos:v0.5.5-alpha.1.pre.1-sqlite
+#    depends_on:
+#      - kratos-migrate
+    image: oryd/kratos:v1.1.0
     ports:
       - "4433:4433" # public
       - "4434:4434" # admin
     restart: unless-stopped
     environment:
-      - DSN=sqlite:///var/lib/sqlite/db.sqlite?_fk=true
+      # use memory
+#      - DSN=sqlite:///tmp/kratos/some-db.sqlite?_fk=true
       - LOG_LEVEL=trace
     command:
-      serve -c /etc/config/kratos/kratos.yml --dev
+      serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
     volumes:
-      -
-        type: volume
+      - type: volume
         source: kratos-sqlite
-        target: /var/lib/sqlite
+        target: /tmp/kratos/some-db.sqlite
         read_only: false
       -
         type: bind
@@ -60,27 +99,6 @@ services:
     networks:
       - internal
       - web
-
-  kratos-selfservice-ui-go:
-    image: davidoram/kratos-selfservice-ui-go:latest
-    environment:
-      - KRATOS_PUBLIC_URL=http://kratos:4433/
-      - KRATOS_ADMIN_URL=http://kratos:4434/
-      - BASE_URL=/
-      # Enable debug trace of Kratos API calls
-      - DEBUG=1
-    networks:
-      internal:
-        # the aliases are not required, but are useful if the applications want to internally
-        # reference each other by host name
-        aliases:
-        - "app1.test"
-    labels:
-      - "traefik.port=4455"
-      - "traefik.http.routers.kratos-selfservice-ui-go.rule=Path(`/`) || PathPrefix(`/dashboard`,`/auth`,`/static`)"
-      - "traefik.docker.network=internal"
-      - "traefik.enable=true"
-    restart: on-failure
 
   traefik:
     image: traefik:2.4

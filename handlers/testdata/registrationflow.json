@@ -1,62 +1,61 @@
 {
-  "expires_at": "2024-05-30T14:54:55.997370963Z",
-  "id": "49036dfd-c1fe-4935-9d11-bd760802a81e",
-  "issued_at": "2024-05-30T14:44:55.997370963Z",
-  "organization_id": null,
-  "request_url": "http://127.0.0.1/self-service/registration/browser",
-  "state": "choose_method",
+  "id": "9acedb5a-016a-40dc-8b41-15a050d35ab8",
   "type": "browser",
+  "expires_at": "2024-06-02T00:05:25.548683052Z",
+  "issued_at": "2024-06-01T23:55:25.548683052Z",
+  "request_url": "http://127.0.0.1:4433/self-service/registration/browser",
   "ui": {
-    "action": "http://127.0.0.1/self-service/registration?flow=49036dfd-c1fe-4935-9d11-bd760802a81e",
+    "action": "http://127.0.0.1/self-service/registration?flow=9acedb5a-016a-40dc-8b41-15a050d35ab8",
     "method": "POST",
     "nodes": [
       {
-        "attributes": {
-          "disabled": false,
-          "name": "csrf_token",
-          "node_type": "input",
-          "required": true,
-          "type": "hidden",
-          "value": "x+EJEkwDtSAYVNabtM2yhXJ0BtGPa4XYCy6RgTjPTpainp8zvrhrO2yyQH6g7oB0CM1z090HqarmSSZAKkqbKA=="
-        },
+        "type": "input",
         "group": "default",
+        "attributes": {
+          "name": "csrf_token",
+          "type": "hidden",
+          "value": "FUHdi4u+ubCtDuI08wM2UI2wgwES55kN8FQt8umPNbIqQjRsMKCadK0C66h0OB7Qz47TQpdPgWAFAvoTWXCjsg==",
+          "required": true,
+          "disabled": false,
+          "node_type": "input"
+        },
         "messages": [],
-        "meta": {},
-        "type": "input"
+        "meta": {}
       },
       {
+        "type": "input",
+        "group": "password",
         "attributes": {
+          "name": "traits.email",
+          "type": "email",
+          "required": true,
           "autocomplete": "email",
           "disabled": false,
-          "name": "traits.email",
-          "node_type": "input",
-          "required": true,
-          "type": "email"
+          "node_type": "input"
         },
-        "group": "password",
         "messages": [],
         "meta": {
           "label": {
-            "context": {
-              "title": "E-Mail"
-            },
             "id": 1070002,
             "text": "E-Mail",
-            "type": "info"
+            "type": "info",
+            "context": {
+              "title": "E-Mail"
+            }
           }
-        },
-        "type": "input"
+        }
       },
       {
+        "type": "input",
+        "group": "password",
         "attributes": {
+          "name": "password",
+          "type": "password",
+          "required": true,
           "autocomplete": "new-password",
           "disabled": false,
-          "name": "password",
-          "node_type": "input",
-          "required": true,
-          "type": "password"
+          "node_type": "input"
         },
-        "group": "password",
         "messages": [],
         "meta": {
           "label": {
@@ -64,42 +63,42 @@
             "text": "Password",
             "type": "info"
           }
-        },
-        "type": "input"
+        }
       },
       {
+        "type": "input",
+        "group": "password",
         "attributes": {
-          "disabled": false,
           "name": "traits.name.first",
-          "node_type": "input",
-          "type": "text"
+          "type": "text",
+          "disabled": false,
+          "node_type": "input"
         },
-        "group": "password",
         "messages": [],
-        "meta": {},
-        "type": "input"
+        "meta": {}
       },
       {
+        "type": "input",
+        "group": "password",
         "attributes": {
-          "disabled": false,
           "name": "traits.name.last",
-          "node_type": "input",
-          "type": "text"
+          "type": "text",
+          "disabled": false,
+          "node_type": "input"
         },
-        "group": "password",
         "messages": [],
-        "meta": {},
-        "type": "input"
+        "meta": {}
       },
       {
-        "attributes": {
-          "disabled": false,
-          "name": "method",
-          "node_type": "input",
-          "type": "submit",
-          "value": "password"
-        },
+        "type": "input",
         "group": "password",
+        "attributes": {
+          "name": "method",
+          "type": "submit",
+          "value": "password",
+          "disabled": false,
+          "node_type": "input"
+        },
         "messages": [],
         "meta": {
           "label": {
@@ -107,9 +106,17 @@
             "text": "Sign up",
             "type": "info"
           }
-        },
-        "type": "input"
+        }
+      }
+    ],
+    "messages": [
+      {
+        "id": 4010003,
+        "text": "Could not find a strategy to sign you up with. Did you fill out the form correctly?",
+        "type": "error"
       }
     ]
-  }
+  },
+  "organization_id": null,
+  "state": "choose_method"
 }

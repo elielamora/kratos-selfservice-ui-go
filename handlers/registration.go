@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	_ "embed"
+	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -46,6 +47,8 @@ func (rp RegistrationParams) Registration(w http.ResponseWriter, r *http.Request
 		return
 	}
 	ui := res.GetUi()
+	data, _ := json.Marshal(ui)
+	log.Println(string(data))
 	dataMap := map[string]interface{}{
 		"method":      ui.Method,
 		"action":      ui.Action,

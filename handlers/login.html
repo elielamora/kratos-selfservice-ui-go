@@ -45,7 +45,12 @@
                 </button>
               </div>
             </div>
-
+            {{range .messages }}
+              <!-- Error messages -->
+              <p data-cy="field_message_id_{{.Id}}" class="mt-2 text-sm text-red-500 bg-red-50">
+                <span class="font-extrabold">{{.Type}}</span> &nbsp; {{.Text}}
+              </p>
+            {{end}}
           </div>
         </div>
       </div>

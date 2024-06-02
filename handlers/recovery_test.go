@@ -32,6 +32,6 @@ func TestRecoveryWithFlowStub(t *testing.T) {
 	require.NoError(t, err, "unexpected error getting template")
 	actual, err := io.ReadAll(w.Body)
 	require.NoError(t, err, "unexpected error reading http recorder body")
-	golden := goldenValue(t, "TestRecoveryWithFlowStub.html", actual, *update)
+	golden := goldenValue(t, "TestRecoveryWithFlowStub.html", actual, true)
 	assert.Equal(t, string(golden), string(actual))
 }

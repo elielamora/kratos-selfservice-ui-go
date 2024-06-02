@@ -3,7 +3,8 @@ services:
     #    image: elielamora/kratos-selfservice-ui-go:latest
     build:
       # use the debug version locally to be able to debug
-      dockerfile: debug.dockerfile
+      #      dockerfile: debug.dockerfile
+      dockerfile: Dockerfile
       context: .
     pull_policy: build
     ports:
@@ -33,36 +34,36 @@ services:
     labels:
       - "traefik.port=4455"
       - "traefik.http.routers.kratos-selfservice-ui-go.rule=Path(`/`) || PathPrefix(`/dashboard`,`/auth`,`/static`)"
-      - "traefik.docker.network=internal"
+      - "traefik.docker.network=kratos-selfservice-ui-go-fork_internal"
       - "traefik.enable=true"
     restart: on-failure
-#    profiles:
-#      - ignore
+  #    profiles:
+  #      - ignore
 
-#  kratos-migrate:
-#    image: oryd/kratos:v1.1.0
-#    environment:
-##      - DSN=sqlite:///var/lib/sqlite/db.sqlite?_fk=true&mode=rwc
-#      - DSN=sqlite:///tmp/kratos/some-db.sqlite?_fk=true
-#    volumes:
-#      -
-#        type: volume
-#        source: kratos-sqlite
-#        target: /tmp/kratos/some-db.sqlite
-#        read_only: false
-#      -
-#        type: bind
-#        source: ./contrib/quickstart/kratos/email-password
-#        target: /etc/config/kratos
-#    command:
-#      migrate sql -c /etc/config/kratos/kratos.yml -e --yes
-#    restart: on-failure
-#    networks:
-#      - internal
+  #  kratos-migrate:
+  #    image: oryd/kratos:v1.1.0
+  #    environment:
+  ##      - DSN=sqlite:///var/lib/sqlite/db.sqlite?_fk=true&mode=rwc
+  #      - DSN=sqlite:///tmp/kratos/some-db.sqlite?_fk=true
+  #    volumes:
+  #      -
+  #        type: volume
+  #        source: kratos-sqlite
+  #        target: /tmp/kratos/some-db.sqlite
+  #        read_only: false
+  #      -
+  #        type: bind
+  #        source: ./contrib/quickstart/kratos/email-password
+  #        target: /etc/config/kratos
+  #    command:
+  #      migrate sql -c /etc/config/kratos/kratos.yml -e --yes
+  #    restart: on-failure
+  #    networks:
+  #      - internal
 
   kratos:
-#    depends_on:
-#      - kratos-migrate
+    #    depends_on:
+    #      - kratos-migrate
     image: oryd/kratos:v1.1.0
     ports:
       - "4433:4433" # public
@@ -70,7 +71,7 @@ services:
     restart: unless-stopped
     environment:
       # use memory
-#      - DSN=sqlite:///tmp/kratos/some-db.sqlite?_fk=true
+      #      - DSN=sqlite:///tmp/kratos/some-db.sqlite?_fk=true
       - LOG_LEVEL=trace
     command:
       serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
@@ -79,15 +80,14 @@ services:
         source: kratos-sqlite
         target: /tmp/kratos/some-db.sqlite
         read_only: false
-      -
-        type: bind
+      - type: bind
         source: ./contrib/quickstart/kratos/email-password
         target: /etc/config/kratos
     networks:
       - internal
     labels:
       - "traefik.http.routers.kratos.rule=PathPrefix(`/sessions/`,`/self-service/`)"
-      - "traefik.docker.network=internal"
+      - "traefik.docker.network=kratos-selfservice-ui-go-fork_internal"
       - "traefik.port=4433"
       - "traefik.enable=true"
 

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"github.com/elielamora/kratos-selfservice-ui-go/apiclient"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -36,9 +37,21 @@ func (p KratosAuthParams) KratoAuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
+		var err error
+		session, _, err := apiclient.PublicClient().FrontendAPI.ToSession(r.Context()).
+			Cookie(r.Header.Get("Cookie")).
+			Execute()
+		if err != nil {
+			log.Printf("error retrieving session using to session endpoint: %v, redirect to %s", err, p.RedirectUnauthURL)
+			http.Redirect(w, r, p.RedirectUnauthURL, http.StatusTemporaryRedirect)
+			return
+		}
+		log.Printf("session found: %v", session)
+		next.ServeHTTP(w, r)
+		return
+
 		client := &http.Client{}
 		var req *http.Request
-		var err error
 		if req, err = http.NewRequest("POST", p.WhoAmIURL, nil); err != nil {
 			log.Printf("Error creating request: %v, redirect to %s", err, p.RedirectUnauthURL)
 			http.Redirect(w, r, p.RedirectUnauthURL, http.StatusPermanentRedirect)

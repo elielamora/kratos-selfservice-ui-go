@@ -126,7 +126,7 @@
 <div class="lg:flex lg:items-center lg:justify-between">
   <div class="flex-1 min-w-0">
     <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate" data-cy="page-heading">
-      Registration
+      Login
     </h2>
   </div>
 </div>
@@ -141,67 +141,63 @@
     <div>
       
 
-<p>Use the form below to register as a new user</p>
+<p>Use the form below to login</p>
 
 <div class="md:grid md:grid-cols-1 md:gap-6">
   <div class="mt-5 md:mt-0">
-    <form method="POST" action="http://127.0.0.1/self-service/registration?flow=9acedb5a-016a-40dc-8b41-15a050d35ab8" accept-charset="UTF-8">
+    <form method="POST" action="http://127.0.0.1/self-service/login?flow=348f82e2-65d0-412a-afb4-4add5435d1ee" accept-charset="UTF-8">
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-
           
+            
+            
             <div class="grid grid-cols-3 gap-6">
-              
-              
               <div class="col-span-3 sm:col-span-2">
                 <label class="block text-sm font-medium text-gray-700"></label>
-
                 <div class="mt-1 flex rounded-md shadow-sm">
                   <input required="true"
                         name="csrf_token"
                         data-cy="csrf_token"
                         type="hidden"
-                        value="FUHdi4u&#43;ubCtDuI08wM2UI2wgwES55kN8FQt8umPNbIqQjRsMKCadK0C66h0OB7Qz47TQpdPgWAFAvoTWXCjsg=="
+                        value="Sc/NLVGMVaDcQgnZ&#43;s8tJZSg28RW42Cwp&#43;FyVQhtMhh2zCTK6pJ2ZNxOAEV99AWl1p6Lh9NLeN1St6W0uJKkGA=="
                         
                         
                         class="border mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-6 py-4"
                   />
                 </div>
 
-                
+                  
 
+                </div>
               </div>
-            </div>
-          
+            
+            
+            
             <div class="grid grid-cols-3 gap-6">
-              
-              
               <div class="col-span-3 sm:col-span-2">
                 <label class="block text-sm font-medium text-gray-700">Email</label>
-
                 <div class="mt-1 flex rounded-md shadow-sm">
                   <input required="true"
-                        name="traits.email"
-                        data-cy="traits.email"
-                        type="email"
-                        value=""
+                        name="identifier"
+                        data-cy="identifier"
+                        type="text"
+                        value="fadfda@fadfd.com"
                         
                         
                         class="border mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-6 py-4"
                   />
                 </div>
 
-                
+                  
 
+                </div>
               </div>
-            </div>
-          
+            
+            
+            
             <div class="grid grid-cols-3 gap-6">
-              
-              
               <div class="col-span-3 sm:col-span-2">
                 <label class="block text-sm font-medium text-gray-700">Password</label>
-
                 <div class="mt-1 flex rounded-md shadow-sm">
                   <input required="true"
                         name="password"
@@ -214,63 +210,16 @@
                   />
                 </div>
 
-                
+                  
 
-              </div>
-            </div>
-          
-            <div class="grid grid-cols-3 gap-6">
-              
-              
-              <div class="col-span-3 sm:col-span-2">
-                <label class="block text-sm font-medium text-gray-700">First name</label>
-
-                <div class="mt-1 flex rounded-md shadow-sm">
-                  <input required="&lt;nil&gt;"
-                        name="traits.name.first"
-                        data-cy="traits.name.first"
-                        type="text"
-                        value=""
-                        
-                        
-                        class="border mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-6 py-4"
-                  />
                 </div>
-
-                
-
               </div>
-            </div>
-          
+            
+            
+            
             <div class="grid grid-cols-3 gap-6">
-              
-              
-              <div class="col-span-3 sm:col-span-2">
-                <label class="block text-sm font-medium text-gray-700">Last name</label>
-
-                <div class="mt-1 flex rounded-md shadow-sm">
-                  <input required="&lt;nil&gt;"
-                        name="traits.name.last"
-                        data-cy="traits.name.last"
-                        type="text"
-                        value=""
-                        
-                        
-                        class="border mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md px-6 py-4"
-                  />
-                </div>
-
-                
-
-              </div>
-            </div>
-          
-            <div class="grid grid-cols-3 gap-6">
-              
-              
               <div class="col-span-3 sm:col-span-2">
                 <label class="block text-sm font-medium text-gray-700"></label>
-
                 <div class="mt-1 flex rounded-md shadow-sm">
                   <input required="&lt;nil&gt;"
                         name="method"
@@ -283,34 +232,37 @@
                   />
                 </div>
 
-                
+                  
 
+                </div>
+              </div>
+            
+
+            <div class="grid grid-cols-3 gap-6">
+              <div class="col-span-3 sm:col-span-2">
+                <a href="/" class="button sm:w-auto bg-gray-50 text-gray-400 hover:text-gray-900 leading-6 py-2 px-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-300 focus:outline-none transition-colors duration-200">Cancel</a>
+                <button data-cy="submit"
+                        class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Login
+                </button>
               </div>
             </div>
-          
-
-          <div class="grid grid-cols-3 gap-6">
-            <div class="col-span-3 sm:col-span-2">
-              <a href="/" class="button sm:w-auto bg-gray-50 text-gray-400 hover:text-gray-900 leading-6 py-2 px-3 border border-gray-200 rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-gray-300 focus:outline-none transition-colors duration-200">Cancel</a>
-              <button data-cy="submit"
-                      class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                  Register
-              </button>
-            </div>
+            
+              
+              <p data-cy="field_message_id_4000006" class="mt-2 text-sm text-red-500 bg-red-50">
+                <span class="font-extrabold">error</span> &nbsp; The provided credentials are invalid, check for spelling mistakes in your password or username, email address, or phone number.
+              </p>
+            
           </div>
-          
-          
-          <p data-cy="field_message_id_4010003" class="mt-2 text-sm text-red-500 bg-red-50">
-            <span class="font-extrabold">error</span> &nbsp; Could not find a strategy to sign you up with. Did you fill out the form correctly?
-          </p>
-          
-
         </div>
       </div>
     </form>
   </div>
 </div>
-<p>If you have already registered, click <a href="/auth/logon">here</a> to logon</p>
+
+<p>If you haven't yet signed up, click <a data-cy="registration" href="/auth/registration">here</a> to register</p>
+
+<p>Click <a data-cy="recovery" href="/auth/recovery">here</a> if you have forgotten your password</p>
 
 
     </div>

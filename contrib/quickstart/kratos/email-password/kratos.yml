@@ -90,4 +90,4 @@ identity:
 
 courier:
   smtp:
-    connection_uri: smtp://mailhog:1025
+    connection_uri: smtp://mailhog:1025/?disable_starttls=true

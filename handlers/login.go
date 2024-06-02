@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -46,6 +47,8 @@ func (lp LoginParams) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	ui := res.GetUi()
+	data, _ := json.Marshal(ui)
+	log.Println(string(data))
 	dataMap := map[string]any{
 		"flow":        flow,
 		"method":      ui.Method,

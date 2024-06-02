@@ -129,6 +129,7 @@ api:
 providers:
   # Enable Docker configuration backend
   docker:
+    watch: true
     # Docker server endpoint. Can be a tcp or a unix socket endpoint.
     #
     # Required
@@ -148,4 +149,4 @@ providers:
     # Optional
     # Default: true
     #
-   exposedByDefault: false
+#    exposedByDefault: false
